@@ -1,0 +1,16 @@
+(npm create vite@latest)
+
+cria um novo projeto
+-----------------------------------------------------------------------------------------
+
+(yarn add styled-components bootstrap)
+
+adiciona o styled components e o bootstrap no projeto
+-----------------------------------------------------------------------------------------
+
+(yarn add @types/styled-components -D)
+
+é usado para adicionar as definições de tipo do Styled Components ao seu 
+projeto TypeScript, para que você possa desenvolver componentes estilizados 
+de forma segura e com verificação de tipos pelo TypeScript.
+-----------------------------------------------------------------------------------------
