@@ -1,15 +1,11 @@
 import { styled } from "styled-components";
 
-// interface PostConteudoProps {
-//     tipo: 'paragrafo' | 'link'
-// }
-
-
 export const PostArticle = styled.article`
 
     background: ${({theme}) => theme.cores['gray600']};
     border-radius: 8px;
     padding: 2.5rem;
+    margin-bottom: 2rem;
 `
 
 export const PostHeader = styled.header`
@@ -55,6 +51,7 @@ export const PostConteudo = styled.div`
     .link {
         color: ${({theme}) => theme.cores['green-light']};
         font-weight: bold;
+        text-decoration: none;
     }
 `
 
@@ -80,6 +77,7 @@ export const PostFormComentario = styled.form`
         padding: 1rem;
         resize: none;
         line-height: 140%;
+        font-size: 1rem;
         
         &:focus {
             border: 1px solid ${({theme}) => theme.cores['green']};

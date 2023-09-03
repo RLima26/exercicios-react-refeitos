@@ -1,30 +1,53 @@
 import { ThumbsUp, Trash } from "phosphor-react";
 import { Avatar } from "../Avatar/Index";
 import { ComentarioContainer } from "./styles";
+import { useState } from "react";
 
-export function Comentario(){
+interface ComentarioProps {
+    content: string,
+    deleteComment: (param: string) => void,
+}
+
+export function Comentario({content, deleteComment}: ComentarioProps){
+
+    const [likeCount, setLikeCount] = useState(0)
+
+    function handleLikeCount(){
+        setLikeCount((valorAtual) => {
+            return valorAtual + 1
+        })
+    }
+
+    function handleDeleteComment(){
+        deleteComment(content)
+    }
+
     return (
         <ComentarioContainer>
-            <Avatar imgUrl="http://github.com/RLima26.png" haBordas={false} />
+            <Avatar imgUrl="https://github.com/GBDev13.png" haBordas={false} />
 
             <div className="commentBox">
                 <div className="commentContent">
                     <header>
                         <div>
-                            <strong>Devon</strong>
-                            <time>Cerca de 2h</time>
+                            <strong>GB Dev</strong>
+                            <time title='11 de maio de 2023' dateTime='2023-05-11 20:26:00'>
+                                há 1 hora
+                            </time>
                         </div>
-                        <button>
+                        <button onClick={handleDeleteComment}>
                             <Trash size={24} />
                         </button>
                     </header>
 
-                    <p>Muito Bom!!</p>
+                    <p>{content}</p>
                 </div>
                 <footer>
-                    <button>
+                    <button
+                        onClick={handleLikeCount}
+                    >
                         <ThumbsUp />
-                        Aplaudir <span>&nbsp;&#8226;&nbsp;03</span>
+                        Aplaudir <span>&nbsp;&#8226;&nbsp;{likeCount}</span>
                     </button>
                 </footer>
             </div>

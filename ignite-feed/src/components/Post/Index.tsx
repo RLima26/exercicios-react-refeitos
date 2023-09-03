@@ -1,51 +1,113 @@
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Avatar } from "../Avatar/Index";
 import { Comentario } from "../Comentario/Index";
 import { PostArticle, PostConteudo, PostFormComentario, PostHeader } from "./styles";
+import {format, formatDistanceToNow} from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
 
-export function Post(){
+interface Author {
+    name: string,
+    role: string,
+    avatarUrl: string,
+}
+
+interface ContentPost {
+    type: 'paragraph' | 'link',
+    content: string,
+}
+
+export interface PostType {
+    id: number,
+    author: Author,
+    publishedAt: Date,
+    content: ContentPost[],
+}
+
+export function Post({author, content, publishedAt}: PostType){
+
+    const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
+        locale: ptBR
+    })
+    // esse código serve para calcular a distancia entre a data atual e uma data informada
+    const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+        locale: ptBR,
+        addSuffix: true
+    })
+    const [newCommentText, setNewCommentText] = useState('')
+    const [comments, setComments] = useState([
+        'muito bom, parabens.'
+    ])
+    const isNewCommentEmpty = newCommentText.length === 0
+
+
+    function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>){
+        setNewCommentText(event.target.value)
+    }
+
+    function handleCreateNewComment(event: FormEvent) {
+        event.preventDefault()
+        setComments([...comments, newCommentText])
+        setNewCommentText('')
+    }
+
+    function deleteComment(commentToDelete: string){
+        const newCommentList = comments.filter(comment=>{
+            return comment != commentToDelete
+        })
+        setComments(newCommentList)
+    }
+    
     return (
         <PostArticle>
             <PostHeader>
                 <div>
-                    <Avatar imgUrl="http://github.com/RLima26.png" />
+                    <Avatar imgUrl={author.avatarUrl} />
                     <div>
-                        <strong>Robson Leitão</strong>
-                        <span>Dev Front-end</span>
+                        <strong>{author.name}</strong>
+                        <span>{author.role}</span>
                     </div>
                 </div>
-                <time>publicado há 1 hora</time>
+                <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>
+                    {publishedDateRelativeToNow}
+                </time>
             </PostHeader>
 
             <PostConteudo>
-                <p>
-                    Fala galeraa 👋
-                </p>
-                <p>
-                    Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀
-                </p>
-                <p className="link">
-                    👉 jane.design/doctorcare
-                </p>
-                <p className="link">
-                    #novoprojeto #nlw #rocketseat
-                </p>
+                {content.map(item => {
+                    if(item.type === 'paragraph'){
+                        return <p key={item.content}>{item.content}</p>
+
+                    }else if(item.type === 'link'){
+                        return <p key={item.content}><a className="link" href='#'>{item.content}</a></p>
+                    }
+                })}
             </PostConteudo>
 
-            <PostFormComentario>
+            <PostFormComentario onSubmit={handleCreateNewComment}>
                 <label htmlFor="comentario">Deixe seu feedback</label>
                 <textarea 
-                    id="comentario" 
                     name='commentario'
                     placeholder='Deixe um comentário'
+                    onChange={handleNewCommentChange}
+                    value={newCommentText}
+                    required
                 />
                 <footer>
-                    <button type="submit">
+                    <button type="submit" disabled={isNewCommentEmpty}>
                         Publicar
                     </button>
                 </footer>
             </PostFormComentario>
             
-            <Comentario />
+            {comments.map(comment => {
+                return (
+                    <Comentario 
+                        key={comment} 
+                        content={comment} 
+                        deleteComment={deleteComment} 
+                    />
+                )
+            })}
         </PostArticle>
     )
 }

@@ -14,3 +14,7 @@ adiciona o styled components e o bootstrap no projeto
 projeto TypeScript, para que você possa desenvolver componentes estilizados 
 de forma segura e com verificação de tipos pelo TypeScript.
 -----------------------------------------------------------------------------------------
+
+(npm i date-fns)
+
+adiciona uma biblioteca para formatar datas.
